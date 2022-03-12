@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=375, initial-scale=1.0">
+    <title>Simple Timesheet</title>
+    <link href="https://unpkg.com/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style/stylesheet.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+</head>
+<body>
+
+    <!-- VUE initiation -->
+    <div id="app">
+
+        <!-- Add new job button -->
+        <a href="addShift"><div class="relative cursor-pointer" v-on:click="addNewShift">
+            <div class="fixed bg-blue-400 bottom-8 right-8 w-16 h-16 rounded-full">
+                <span class="absolute top-7 left-4 ml-0.5 mt-0.5 w-7 h-1 bg-blue-200 rounded-md mb-1"></span>
+                <span class="absolute top-4 left-7 ml-0.5 mt-0.5 w-1 h-7 bg-blue-200 rounded-md mb-1"></span>
+            </div>
+        </div></a>
+
+        <!-- Navbar -->
+        <div class="bg-gray-800 w-full h-40 flex justify-between items-center">
+
+            <!-- Logo -->
+            <div class="mx-8">
+                <a href="/"><h1 class="text-blue-400 font-bold font-base">Job Timesheet</h1></a>
+            </div>
+
+            <!-- Hamburger -->
+            <div class="flex flex-col mx-8 cursor-pointer" v-on:click="calculateTotalHours()">
+                <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+                <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+                <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+            </div>
+        </div>
+
+        <!-- Profile Overview -->
+        <div class="bg-gray-700 pt-6 pb-4 flex flex-row justify-between items-center">
+            <span id="month-bg" class="mx-8 p-2 rounded-md">
+                <h2 class="text-white font-bold text-sm">March 2022</h2>
+            </span>
+            <span class="mx-8">
+                <h2 class="text-blue-400 font-bold text-sm">{{totalWorkedHours}}h £{{payslip}}</h2>
+            </span>
+        </div>
+
+        <!-- Hours Tracked -->
+        <div class="bg-gray-700 w-full h-screen">
+
+            <!-- Hours Tracked Title -->
+            <div class="flex flex-col px-8">
+                <h1 class="text-white font-bold font-base pt-6">Shifts Worked:</h1>
+                <span id="hours-tracked-divider" class="w-full h-1 rounded-md mt-3 mb-3"></span>
+            </div>
+
+            <!-- Hours Tracked Body -->
+            <div class="grid grid-cols-3 py-2" v-for="job in shifts">
+                <div class="col-span-2 py-2 bg-gray-600">
+                    <h2 class="text-white text-sm px-8 pb-0.5">{{job.date}}</h2>
+                    <h2 class="text-white text-sm px-8 pb-0.5">{{job.shiftNumber}}</h2>
+                    <h2 class="text-white text-sm px-8 pb-0.5">{{job.hours}} hours</h2>
+                </div>
+
+                <!-- Total Earnings -->
+                <div class=" grid bg-gray-800 py-1 pl-8 row-span-2 mr-8 items-center rounded-r-md">
+                    <h2 class="text-white">£{{job.shiftSum}}</h2>
+                </div>
+        
+                <!-- Hours Tracked Bonus Body -->
+                <div class="col-span-2 flex flex-row flex-wrap bg-gray-500 py-1 pl-8">
+                    <h2 class="text-white text-xs mr-3" v-if="job.bonus_crewChief>=10">Crew Chief +£{{job.bonus_crewChief}}</h2>
+                    <h2 class="text-white text-xs mr-3" v-if="job.bonus_nightShift>=15">Night-shift +£{{job.bonus_nightShift}}</h2>
+                    <h2 class="text-white text-xs mr-3" v-if="job.bonus_outOfBounds>=10">Out of Bounds +£{{job.bonus_outOfBounds}}</h2>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Footer -->
+        <div class="flex bg-gray-900 py-3 justify-between px-8">
+            <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Make a suggestion</a>
+            <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Report a bug</a>
+        </div>
+
+    </div>  
+    <script src="../js/shift.js"></script>
+    <script src="../js/vue.js"></script>
+
+
+
+</body>
+</html>
