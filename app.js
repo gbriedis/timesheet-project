@@ -7,10 +7,10 @@ const app = express();
 const uri = "mongodb+srv://gbriedis:strongpw@cluster0.pr4ee.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 app.use(cors())
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extennded: true }));
 
 // Connect to the database
 let database
@@ -67,6 +67,10 @@ app.use('/views', express.static(__dirname + 'public/views'))
 // Load Index Webpage
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/views/index.html')
+})
+
+app.get('/site.json', (req, res) => {
+    res.sendFile(__dirname + '/site.json')
 })
 
 // Load Add Shift Form Webpage
