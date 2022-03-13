@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,90 +9,131 @@
     <link rel="stylesheet" href="../style/stylesheet.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+    <link rel="manifest" href="../../site.webmanifest">
 </head>
-<body>
+
+<body class="bg-gray-700">
 
     <!-- VUE initiation -->
     <div id="app">
 
         <!-- Add new job button -->
-        <a href="addShift"><div class="relative cursor-pointer" v-on:click="addNewShift">
-            <div class="fixed bg-blue-400 bottom-8 right-8 w-16 h-16 rounded-full">
-                <span class="absolute top-7 left-4 ml-0.5 mt-0.5 w-7 h-1 bg-blue-200 rounded-md mb-1"></span>
-                <span class="absolute top-4 left-7 ml-0.5 mt-0.5 w-1 h-7 bg-blue-200 rounded-md mb-1"></span>
+        <a href="addShift">
+            <div class="relative cursor-pointer">
+                <div class="fixed bg-blue-400 bottom-8 right-8 w-16 h-16 rounded-full hover:bg-blue-500 transition ease-in-out">
+                    <span class="absolute top-7 left-4 ml-0.5 mt-0.5 w-7 h-1 bg-blue-200 rounded-md mb-1"></span>
+                    <span class="absolute top-4 left-7 ml-0.5 mt-0.5 w-1 h-7 bg-blue-200 rounded-md mb-1"></span>
+                </div>
             </div>
-        </div></a>
+        </a>
 
         <!-- Navbar -->
-        <div class="bg-gray-800 w-full h-40 flex justify-between items-center">
+        <div class="bg-gray-800">
+            <div class="bg-gray-800 w-auto h-40 flex justify-between items-center sm:m-auto xl:max-w-screen-xl">
 
-            <!-- Logo -->
-            <div class="mx-8">
-                <a href="/"><h1 class="text-blue-400 font-bold font-base">Job Timesheet</h1></a>
-            </div>
+                <!-- Logo -->
+                <div class="mx-8">
+                    <a href="/">
+                        <h1 class="text-blue-400 font-bold font-base hover:text-blue-300 transition ease-in-out">Job Timesheet</h1>
+                    </a>
+                </div>
 
-            <!-- Hamburger -->
-            <div class="flex flex-col mx-8 cursor-pointer" v-on:click="calculateTotalHours()">
-                <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
-                <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
-                <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+                <!-- Hamburger -->
+                <div class="flex flex-col mx-8 cursor-pointer">
+                    <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+                    <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+                    <span class="w-8 h-1 bg-blue-400 rounded-md mb-1"></span>
+                </div>
             </div>
         </div>
 
         <!-- Profile Overview -->
-        <div class="bg-gray-700 pt-6 pb-4 flex flex-row justify-between items-center">
-            <span id="month-bg" class="mx-8 p-2 rounded-md">
-                <h2 class="text-white font-bold text-sm">March 2022</h2>
-            </span>
-            <span class="mx-8">
-                <h2 class="text-blue-400 font-bold text-sm">{{totalWorkedHours}}h £{{payslip}}</h2>
-            </span>
+        <div class="bg-gray-700">
+            <div class="bg-gray-700 pt-6 pb-4 flex flex-row justify-between items-center sm:m-auto xl:max-w-screen-xl">
+                <span id="month-bg" class="mx-8 p-2 rounded-md">
+                    <h2 class="text-white font-bold text-sm">{{currentDate()}}</h2>
+                </span>
+                <span class="mx-8 flex flex-col items-center">
+                    <h2 class="text-blue-400 font-bold text-sm py-1">{{totalWorkedHours}}h £{{payslip}}</h2>
+                    <div class="flex flex-row">
+                        <span class="pr-2 flex flex-row items-center">
+                            <img :src="crewChief_icon" alt="Crew Chief Icon">
+                            <h2 class="text-white text-xs mx-1">{{totalCrewChiefJobs}}</h2>
+                        </span>
+                        <span class="pr-2 flex flex-row items-center">
+                            <img :src="nightShift_icon" alt="Night Shift Icon">
+                            <h2 class="text-white text-xs mx-1">{{totalNightShiftJobs}}</h2>
+                        </span>
+                        <span class="pr-2 flex flex-row items-center">
+                            <img :src="outOfBounds_icon" alt="Out of Bounds Icon">
+                            <h2 class="text-white text-xs mx-1">{{totalOutOfBoundsJobs}}</h2>
+                        </span>
+                    </div>
+                </span>
+            </div>
         </div>
 
         <!-- Hours Tracked -->
-        <div class="bg-gray-700 w-full h-screen">
+        <div class="bg-gray-700">
+            <div class="bg-gray-700 w-full sm:m-auto xl:max-w-screen-xl">
 
-            <!-- Hours Tracked Title -->
-            <div class="flex flex-col px-8">
-                <h1 class="text-white font-bold font-base pt-6">Shifts Worked:</h1>
-                <span id="hours-tracked-divider" class="w-full h-1 rounded-md mt-3 mb-3"></span>
-            </div>
-
-            <!-- Hours Tracked Body -->
-            <div class="grid grid-cols-3 py-2" v-for="job in shifts">
-                <div class="col-span-2 py-2 bg-gray-600">
-                    <h2 class="text-white text-sm px-8 pb-0.5">{{job.date}}</h2>
-                    <h2 class="text-white text-sm px-8 pb-0.5">{{job.shiftNumber}}</h2>
-                    <h2 class="text-white text-sm px-8 pb-0.5">{{job.hours}} hours</h2>
+                <!-- Hours Tracked Title -->
+                <div class="flex flex-col px-8">
+                    <h1 class="text-white font-bold font-base pt-6">Shifts Worked:</h1>
+                    <span id="hours-tracked-divider" class="w-full h-1 rounded-md mt-3 mb-3"></span>
                 </div>
 
-                <!-- Total Earnings -->
-                <div class=" grid bg-gray-800 py-1 pl-8 row-span-2 mr-8 items-center rounded-r-md">
-                    <h2 class="text-white">£{{job.shiftSum}}</h2>
-                </div>
-        
-                <!-- Hours Tracked Bonus Body -->
-                <div class="col-span-2 flex flex-row flex-wrap bg-gray-500 py-1 pl-8">
-                    <h2 class="text-white text-xs mr-3" v-if="job.bonus_crewChief>=10">Crew Chief +£{{job.bonus_crewChief}}</h2>
-                    <h2 class="text-white text-xs mr-3" v-if="job.bonus_nightShift>=15">Night-shift +£{{job.bonus_nightShift}}</h2>
-                    <h2 class="text-white text-xs mr-3" v-if="job.bonus_outOfBounds>=10">Out of Bounds +£{{job.bonus_outOfBounds}}</h2>
+                <!-- Hours Tracked Body -->
+                <div class="grid grid-cols-3 py-2" v-for="job in shifts">
+                    <div class="col-span-2 py-2 bg-gray-600 xl:rounded-tl-md">
+                        <h2 class="text-white text-sm px-8 pb-0.5">{{job.date}}</h2>
+                        <h2 class="text-white text-sm px-8 pb-0.5">{{job.shiftNumber}}</h2>
+                        <h2 class="text-white text-sm px-8 pb-0.5">{{job.hours}} hours</h2>
+                    </div>
+
+                    <!-- Total Earnings -->
+                    <div class=" grid bg-gray-800 py-1 pl-8 row-span-2 mr-8 items-center rounded-r-md">
+                        <h2 class="text-white">£{{job.shiftSum}}</h2>
+                    </div>
+
+                    <!-- Hours Tracked Bonus Body -->
+                    <div class="col-span-2 flex flex-row flex-wrap bg-gray-500 py-1 pl-8 xl:rounded-bl-md"
+                        v-if="job.crewChief_bonus>=10 || job.nightShift_bonus>=15 || job.outOfBounds_bonus>=10" >
+                        <span v-if="job.crewChief_bonus==10" class="pr-2">
+                            <img :src="crewChief_icon" alt="Crew Chief Icon">
+                        </span>
+                        <span v-if="job.nightShift_bonus==15" class="pr-2">
+                            <img :src="nightShift_icon" alt="Night Shift Icon">
+                        </span>
+                        <span v-if="job.outOfBounds_bonus>=10" class="pr-2">
+                            <img :src="outOfBounds_icon" alt="Out of Bounds Icon">
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-
-
 
         <!-- Footer -->
-        <div class="flex bg-gray-900 py-3 justify-between px-8">
-            <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Make a suggestion</a>
-            <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Report a bug</a>
+        <div class="bg-gray-900 w-screen -z-10">
+            <div class="flex bottom-0 left-0 w-screen bg-gray-900 py-3 justify-between px-8 sm:m-auto ">
+                <div class="xl:flex xl:justify-between xl:m-auto xl:max-w-screen-xl">
+                    <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Make a suggestion</a>
+                    <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Report a bug</a>
+                </div>
+                
+            </div>
         </div>
 
-    </div>  
+    </div>
     <script src="../js/shift.js"></script>
     <script src="../js/vue.js"></script>
 
 
 
 </body>
+
 </html>

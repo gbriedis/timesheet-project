@@ -53,5 +53,27 @@ let shift = [
     bonus_outOfBounds: 10,
     bonus_nightShift: 0,
     shiftSum: 120
-    }
+    },
+    {
+    shift_id: 5,
+    date: "13/03/2022",
+    shiftNumber: 2412312,
+    hours: 8,
+    hourlyRate: 12.5,
+    bonus_crewChief: 10,
+    bonus_outOfBounds: 10,
+    bonus_nightShift: 0,
+    shiftSum: 120
+    },
+    {
+    shift_id: 5,
+    date: "13/03/2022",
+    shiftNumber: 2412312,
+    hours: 8,
+    hourlyRate: 12.5,
+    bonus_crewChief: 10,
+    bonus_outOfBounds: 10,
+    bonus_nightShift: 0,
+    shiftSum: 120
+    },
 ]
