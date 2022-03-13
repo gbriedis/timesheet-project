@@ -28,7 +28,7 @@ let addShiftApp = new Vue ({
 
             console.log(this.shiftData)
 
-            fetch("http://localhost:3000/collection/shifts", {
+            fetch("https://timesheet-project.herokuapp.com/collection/shifts", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

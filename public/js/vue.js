@@ -22,7 +22,7 @@ let app = new Vue ({
     methods: {
         // fetch all shifts
         fetchShifts() {
-            fetch("http://localhost:3000/collection/shifts").then((response) => {
+            fetch("https://timesheet-project.herokuapp.com/collection/shifts").then((response) => {
                 response.json().then((data) => {
                     //calculate the total number of hours worked with additional bonuses of crew chief, night shift and out of bounds 
                     let sum = 0;
