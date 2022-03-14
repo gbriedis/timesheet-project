@@ -15,7 +15,13 @@ let app = new Vue ({
         hourlyRate: 12.5,
         crewChief_rate: 10,
         nightShift_rate: 15,
-        outOfBounds_rate: 10
+        outOfBounds_rate: 10,
+        editShift: false,
+        shiftDetails: {
+            date: 0,
+            shiftNumber: 0,
+            hours: 0,
+        }
     },
     
     // functions
@@ -70,7 +76,13 @@ let app = new Vue ({
                 });
             })
         },
-            
+        
+        editDetails: function(jobDetails) {
+            this.shiftDetails.date = jobDetails.date
+            this.shiftDetails.shiftNumber = jobDetails.shiftNumber
+            this.shiftDetails.hours = jobDetails.hours
+        },
+         
         // gets current date (year, month, day)
         currentDate: function() {
             const current = new Date();
@@ -84,12 +96,8 @@ let app = new Vue ({
         this.fetchShifts()
         this.currentDate()
     },
-
-
+    
     computed: {
 
-
-
-        
     }
 })

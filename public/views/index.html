@@ -8,6 +8,8 @@
     <link href="https://unpkg.com/tailwindcss@^2.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style/stylesheet.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
@@ -52,7 +54,7 @@
         </div>
 
         <!-- Profile Overview -->
-        <div class="bg-gray-700">
+        <div class="bg-gray-700"  v-if="editShift == false">
             <div class="bg-gray-700 pt-6 pb-4 flex flex-row justify-between items-center sm:m-auto xl:max-w-screen-xl">
                 <span id="month-bg" class="mx-8 p-2 rounded-md">
                     <h2 class="text-white font-bold text-sm">{{currentDate()}}</h2>
@@ -77,8 +79,9 @@
             </div>
         </div>
 
+
         <!-- Hours Tracked -->
-        <div class="bg-gray-700">
+        <div class="bg-gray-700"  v-if="editShift == false">
             <div class="bg-gray-700 w-full sm:m-auto xl:max-w-screen-xl">
 
                 <!-- Hours Tracked Title -->
@@ -88,7 +91,7 @@
                 </div>
 
                 <!-- Hours Tracked Body -->
-                <div class="grid grid-cols-3 py-2" v-for="job in shifts">
+                <div class="grid grid-cols-3 py-2 cursor-pointer" v-for="job in shifts" @click="editShift = true; editDetails(job)">
                     <div class="col-span-2 py-2 bg-gray-600 xl:rounded-tl-md">
                         <h2 class="text-white text-sm px-8 pb-0.5">{{job.date}}</h2>
                         <h2 class="text-white text-sm px-8 pb-0.5">{{job.shiftNumber}}</h2>
@@ -116,7 +119,88 @@
                 </div>
             </div>
         </div>
+        
+        <div v-if="editShift == true">
+            <div class="bg-gray-700">
+            
+                <!-- Go back button -->
+                <div class="bg-blue-500 hover:bg-blue-600 transition ease-in-out ">
+                    <div class="px-8 py-4 cursor-pointer xl:max-w-screen-xl sm:m-auto" @click="editShift = false">
+                        <p class="text-blue-100 font-bold font-base  ">Go Back</p>
+                    </div>
+                </div>
+            
+                <form class="bg-gray-700 shadow-md px-8 pt-6 pb-8 sm:m-auto xl:max-w-screen-xl sm:shadow-none sm:h-screen">
+                    <!-- Hours Tracked Title -->
+                    <div class="flex flex-col">
+                        <h1 class="text-white font-bold font-base ">Edit shift ({{shiftDetails.shiftNumber}}): </h1>
+                        <span id="hours-tracked-divider" class="w-full h-1 rounded-md mt-3 mb-3"></span>
+                    </div>
+                    
+                    <!-- Shift Date -->
+                    <div class="mb-4">
+                        <label class="block text-sm text-white mb-2" for="date">Date</label>
+                        <input class="text-sm shadow appearance-none rounded w-full py-2 px-3 text-white bg-gray-900 leading-tight focus:outline-none focus:shadow-outline" id="date" type="date" :placeholder="[[ shiftDetails.date ]]">
+                    </div>
+    
+                    <!-- Shift Number -->
+                    <div class="mb-6">
+                        <label class="block text-sm text-white mb-2" for="shiftNumber">Shift Number</label>
+                        <input class="text-sm shadow appearance-none rounded w-full py-2 px-3 text-white bg-gray-900 leading-tight focus:outline-none focus:shadow-outline" id="shiftNumber" type="text" :placeholder="[[ shiftDetails.shiftNumber ]]">
+                    </div>
+    
+                    <!-- Hours Worked -->
+                    <div class="mb-6">
+                        <label class="block text-sm text-white mb-2" for="shiftHours">Hours Worked</label>
+                        <input class="text-sm shadow appearance-none rounded w-full py-2 px-3 text-white bg-gray-900 leading-tight focus:outline-none focus:shadow-outline" id="shiftHours" type="number" :placeholder="[[ shiftDetails.hours ]]">
+                    </div>
+    
+                    <!-- Hours Tracked Title -->
+                    <div class="flex flex-col">
+                        <h1 class="text-white">Additional bonuses:</h1>
+                        <span id="hours-tracked-divider" class="w-full h-1 rounded-md mt-3 mb-3"></span>
+                    </div>
+    
+                    <!-- Crew Chief Bonus Checkbox -->
+                    <div class="flex items-start mb-6">
+                        <div class="flex items-center h-5">
+                            <input id="crewChiefBonus" aria-describedby="crewChiefBonus" type="checkbox" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
+                        </div>
+                        <div class="ml-3 text-sm text-white">
+                            <label for="crewChiefBonus" class="font-medium text-white ">Crew Chief Bonus +£10</label>
+                        </div>
+                    </div>
+    
+                    <!-- Night Shift Bonus Checkbox -->
+                    <div class="flex items-start mb-6">
+                        <div class="flex items-center h-5">
+                            <input id="nightshiftBonus" aria-describedby="nightshiftBonus" type="checkbox" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
+                        </div>
+                        <div class="ml-3 text-sm text-white">
+                            <label for="nightshiftBonus" class="font-medium text-white ">Night-shift Bonus +£15</label>
+                        </div>
+                    </div>
+    
+                    <!-- Night Shift Bonus Checkbox -->
+                    <div class="flex items-start mb-6">
+                        <div class="flex items-center h-5">
+                            <input id="outOfBoundsBonus" aria-describedby="outOfBoundsBonus" type="checkbox" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800">
+                        </div>
+                        <div class="ml-3 text-sm text-white">
+                            <label for="outOfBoundsBonus" class="font-medium text-white ">Out of London Bonus +£10</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit form button -->
+                    <div class="flex items-center justify-between">
+                        <button class="text-white bg-gray-900 p-2 text-sm rounded-xl hover:bg-indigo-300 transition duration-150 ease-in-out">Edit Shift</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
 
+        
         <!-- Footer -->
         <div class="bg-gray-900 w-screen -z-10">
             <div class="flex bottom-0 left-0 w-screen bg-gray-900 py-3 justify-between px-8 sm:m-auto ">
@@ -124,11 +208,13 @@
                     <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Make a suggestion</a>
                     <a class="text-xs text-gray-200" href="mailto:gintersbriedis@gmail.com">Report a bug</a>
                 </div>
-                
             </div>
         </div>
+        
+
 
     </div>
+    <script src="../js/shiftApp.js"></script>
     <script src="../js/shift.js"></script>
     <script src="../js/vue.js"></script>
 
